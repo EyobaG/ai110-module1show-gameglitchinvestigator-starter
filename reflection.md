@@ -33,15 +33,10 @@ I decided a bug was really fixed only when I could see the correct behavior both
 
 ## 4. What did you learn about Streamlit and state?
 
-- In your own words, explain why the secret number kept changing in the original app.
-- How would you explain Streamlit "reruns" and session state to a friend who has never used Streamlit?
-- What change did you make that finally gave the game a stable secret number?
+The secret number kept changing because Streamlit reruns the entire script from top to bottom every time the user interacts with the page, so `random.randint()` was being called again on every button click, generating a brand new secret each time. Streamlit reruns are like refreshing the page — everything resets unless you store the value in `st.session_state`, which acts like a small memory that survives between reruns. The fix was wrapping the secret generation in `if "secret" not in st.session_state:` so it only runs once at the start of a new game, not on every rerun.
 
 ---
 
 ## 5. Looking ahead: your developer habits
 
-- What is one habit or strategy from this project that you want to reuse in future labs or projects?
-  - This could be a testing habit, a prompting strategy, or a way you used Git.
-- What is one thing you would do differently next time you work with AI on a coding task?
-- In one or two sentences, describe how this project changed the way you think about AI generated code.
+One habit I want to keep is writing tests that target the exact bug I just fixed, not just general passing tests — the `test_too_high_message_says_lower` test would have caught the hint bug immediately if it had existed from the start. Next time I work with AI on a coding task I would read the full function it touches before accepting the change, because the AI fixed the `try` block but left the `except` fallback broken, which I only caught by reading carefully. This project made me realize that AI-generated code can look completely correct on the surface while hiding subtle logic bugs, so I now treat AI suggestions the same way I would treat code from a teammate — useful, but always worth verifying.
